@@ -105,6 +105,7 @@ impl Scope {
 
 impl fmt::Display for Scope {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(f, "{}", style::Reset)?;
         for y in 0..24 {
             write!(f, "█{}", Fg(Rgb(70, 255, 30)))?;
             for chunk in self.samples.chunks(2) {
