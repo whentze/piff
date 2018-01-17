@@ -1,0 +1,9 @@
+[package]
+name = "piff"
+version = "0.1.0"
+authors = ["muvlon <muvlon@hentzes.de>"]
+
+[dependencies]
+termion = "1.5.1"
+cpal = "0.6.0"
+lazy_static = "1.0.0"
