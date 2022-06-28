@@ -78,6 +78,16 @@ impl Add<u8> for Note {
     }
 }
 
+impl Sub<u8> for Note {
+    type Output = Note;
+    fn sub(self, rhs: u8) -> Note {
+        Note {
+            class: PitchClass::from(self.class as u8 - rhs),
+            octave: self.octave + (self.class as u8 - rhs) / 12,
+        }
+    }
+}
+
 impl AddAssign<u8> for Note {
     fn add_assign(&mut self, rhs: u8) {
         self.octave = self.octave + (self.class as u8 + rhs) / 12;
@@ -114,47 +124,18 @@ impl Step for Note {
             None
         }
     }
-    fn replace_one(&mut self) -> Self {
-        let res = *self;
-        *self = Note {
-            octave: 0,
-            class: Bb,
-        };
-        res
-    }
 
-    fn replace_zero(&mut self) -> Self {
-        let res = *self;
-        *self = Note {
-            octave: 0,
-            class: A,
-        };
-        res
-    }
-
-    fn add_one(&self) -> Self {
-        *self + 1
-    }
-
-    fn sub_one(&self) -> Self {
-        match self.class as u8 {
-            0 => Note {
-                class: B,
-                octave: self.octave,
-            },
-            1...11 => Note {
-                class: PitchClass::from(self.class as u8 - 1),
-                octave: self.octave,
-            },
-            _ => {
-                panic!("Something went very wrong in the PitchClass -> u8 conversion");
-            }
+    fn forward_checked(start: Self, count: usize) -> Option<Self> {
+        if count < 256 {
+            Some(start + count as u8)
+        } else {
+            None
         }
     }
 
-    fn add_usize(&self, n: usize) -> Option<Self> {
-        if n < 256 {
-            Some(*self + n as u8)
+    fn backward_checked(start: Self, count: usize) -> Option<Self> {
+        if count < 256 {
+            Some(start + count as u8)
         } else {
             None
         }
